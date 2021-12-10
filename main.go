@@ -3,9 +3,11 @@ package main
 import (
 	"admin/src/database"
 	"admin/src/routes"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -16,6 +18,7 @@ func main() {
 	// Redis
 	database.SetupRedis()
 	database.SetupCacheChannel()
+	loadEnv()
 
 	app := fiber.New()
 
@@ -27,4 +30,12 @@ func main() {
 	}))
 
 	app.Listen(":3000")
+}
+
+func loadEnv() {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	}
 }
